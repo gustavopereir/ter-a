@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>🌟 Terça a gente se vê?</title>
+    <title>🌟 Quinta a gente se vê?</title>
     <style>
         /* ============================================================
            RESET & BASE
@@ -114,11 +114,6 @@
             text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
         }
 
-        .question .destaque-roxo {
-            color: #c8a0ff;
-            text-shadow: 0 0 30px rgba(200, 160, 255, 0.3);
-        }
-
         .question small {
             display: block;
             font-size: 13px;
@@ -127,12 +122,6 @@
             margin-top: 2px;
             letter-spacing: 1px;
             opacity: 0.7;
-        }
-
-        .question .hora {
-            color: #ffb07c;
-            font-weight: 600;
-            font-size: 26px;
         }
 
         /* ============================================================
@@ -315,9 +304,6 @@
             .question {
                 font-size: 20px;
             }
-            .question .hora {
-                font-size: 22px;
-            }
             .btn {
                 padding: 10px 20px;
                 font-size: 14px;
@@ -350,9 +336,6 @@
             .question {
                 font-size: 17px;
             }
-            .question .hora {
-                font-size: 18px;
-            }
             .btn {
                 padding: 8px 14px;
                 font-size: 12px;
@@ -376,11 +359,11 @@
 
     <!-- ===== JANELA ===== -->
     <section class="window" id="window">
-        <div class="header-tag">🌟 TERÇA</div>
+        <div class="header-tag">🌟 QUINTA</div>
 
         <div class="question" id="titulo">
-            Terça a gente <span class="highlight">se vê</span>? 
-            <small>✨ na roda às <span class="hora">19:30</span> ✨</small>
+            Quinta a gente <span class="highlight">se vê</span>? 
+            <small>✨ bora? ✨</small>
         </div>
 
         <!-- Gatinho -->
@@ -604,8 +587,8 @@
 
             titulo.innerHTML = `
                 🌟 Combinamos então! 
-                <span class="highlight">Terça-feira</span> é dia! 
-                <small>🎉 na roda às <span class="hora">19:30</span> te espero! 💫</small>
+                <span class="highlight">Quinta-feira</span> é dia! 
+                <small>🎉 te espero lá! 💫</small>
             `;
 
             btnNao.style.display = 'none';
@@ -640,7 +623,6 @@
                 el.style.animationDelay = (Math.random() * 3) + 's';
                 el.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
                 
-                // Cores diferentes para as estrelas
                 if (el.textContent === '⭐' || el.textContent === '🌟') {
                     el.style.textShadow = '0 0 30px rgba(255, 215, 0, 0.8)';
                 } else if (el.textContent === '✨' || el.textContent === '💫') {
@@ -739,7 +721,7 @@
         btnNao.style.left = 'auto';
         btnNao.style.top = 'auto';
 
-        console.log('🐱 Terça a gente se vê? 🌟 (celular)');
+        console.log('🐱 Quinta a gente se vê? 🌟');
     </script>
 
 </body>
