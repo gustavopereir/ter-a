@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>🌟 Terça a gente se vê?</title>
+    <style>
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: linear-gradient(145deg, #0d1a2a, #1a0e2a);
+            font-family: 'Segoe UI', 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            touch-action: none;
+            position: relative;
+        }
+
+        /* ============================================================
+           CENÁRIO: FUNDO ESTRELADO
+           ============================================================ */
+        .fundo-estrelado {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(2px 2px at 10% 20%, #fff8e0, transparent),
+                radial-gradient(2px 2px at 30% 65%, #fff8e0, transparent),
+                radial-gradient(3px 3px at 55% 15%, #ffe8b0, transparent),
+                radial-gradient(2px 2px at 70% 45%, #fff8e0, transparent),
+                radial-gradient(2px 2px at 85% 75%, #fff8e0, transparent),
+                radial-gradient(3px 3px at 15% 85%, #ffe8b0, transparent),
+                radial-gradient(2px 2px at 92% 10%, #fff8e0, transparent),
+                radial-gradient(2px 2px at 45% 55%, #fff8e0, transparent),
+                radial-gradient(2px 2px at 5% 50%, #ffe8b0, transparent),
+                radial-gradient(3px 3px at 75% 90%, #fff8e0, transparent),
+                radial-gradient(circle at 70% 20%, rgba(255, 240, 200, 0.05), transparent 60%),
+                radial-gradient(circle at 30% 80%, rgba(200, 150, 255, 0.05), transparent 50%),
+                linear-gradient(180deg, #0b0a1a 0%, #1a0e2a 40%, #0d1a2a 100%);
+            background-blend-mode: normal;
+        }
+
+        /* ============================================================
+           JANELA PRINCIPAL
+           ============================================================ */
+        .window {
+            position: relative;
+            z-index: 10;
+            background: rgba(20, 15, 30, 0.88);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 4px solid #b8956a;
+            border-radius: 32px 32px 28px 28px;
+            padding: 20px 20px 30px;
+            max-width: 420px;
+            width: 92%;
+            text-align: center;
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.8),
+                0 0 0 2px #6a4f3a inset,
+                0 0 40px rgba(180, 140, 80, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        /* ============================================================
+           HEADER
+           ============================================================ */
+        .header-tag {
+            display: inline-block;
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: #ffd700;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 4px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            background: rgba(255, 215, 0, 0.06);
+            padding: 4px 14px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        /* ============================================================
+           PERGUNTA
+           ============================================================ */
+        .question {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f5ede4;
+            margin: 8px 0 14px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+            letter-spacing: 0.5px;
+            line-height: 1.3;
+        }
+
+        .question .highlight {
+            color: #ffd700;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .question .destaque-roxo {
+            color: #c8a0ff;
+            text-shadow: 0 0 30px rgba(200, 160, 255, 0.3);
+        }
+
+        .question small {
+            display: block;
+            font-size: 13px;
+            font-weight: 300;
+            color: #c8b8a8;
+            margin-top: 2px;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+
+        .question .hora {
+            color: #ffb07c;
+            font-weight: 600;
+            font-size: 26px;
+        }
+
+        /* ============================================================
+           CANVAS DO GATINHO
+           ============================================================ */
+        .cat-frame {
+            position: relative;
+            display: inline-block;
+            padding: 6px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #b8956a, #7a5f44);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 0 2px #4a3528 inset;
+            margin: 4px auto 12px;
+        }
+
+        #cat {
+            display: block;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: #1a1410;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 4px 20px rgba(180, 140, 80, 0.25));
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        /* ============================================================
+           BOTÕES
+           ============================================================ */
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+            min-height: 70px;
+            position: relative;
+            width: 100%;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+            position: relative;
+            min-width: 80px;
+            font-family: inherit;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            user-select: none;
+        }
+
+        .btn:active {
+            transform: scale(0.94);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Botão SIM (VOU) */
+        #btnSim {
+            background: linear-gradient(145deg, #7a5ac8, #5a2a9a);
+            color: #fff;
+            border: 2px solid #9a7ad6;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            z-index: 5;
+        }
+
+        #btnSim:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 0 rgba(0, 0, 0, 0.3), 0 0 40px rgba(90, 42, 154, 0.4);
+        }
+
+        /* Botão NÃO (NÃO VOU) - VAI FUGIR */
+        #btnNao {
+            background: linear-gradient(145deg, #6a4a4a, #4a2a2a);
+            color: #d0b0b0;
+            border: 2px solid #8a5a5a;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: left 0.08s ease, top 0.08s ease, transform 0.2s;
+            position: relative;
+            z-index: 10;
+        }
+
+        #btnNao:hover {
+            transform: scale(0.96);
+        }
+
+        /* ============================================================
+           EMOJIS / DECORAÇÃO
+           ============================================================ */
+        .deco {
+            font-size: 16px;
+            margin: 0 3px;
+            opacity: 0.6;
+        }
+
+        /* ============================================================
+           ESTRELAS E EMOJES CAINDO
+           ============================================================ */
+        .star-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            font-size: 24px;
+            animation: fall linear forwards;
+            opacity: 0.9;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            user-select: none;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-60px) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* ============================================================
+           CONFETES COLORIDOS
+           ============================================================ */
+        .confetti-piece {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            pointer-events: none;
+            z-index: 9998;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-20px) rotate(0deg) scale(0);
+                opacity: 1;
+            }
+            20% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                transform: translateY(110vh) rotate(1080deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* ============================================================
+           RESPONSIVO
+           ============================================================ */
+        @media (max-width: 500px) {
+            .window {
+                padding: 16px 14px 22px;
+                border-radius: 24px;
+            }
+            .question {
+                font-size: 20px;
+            }
+            .question .hora {
+                font-size: 22px;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                min-width: 65px;
+            }
+            .buttons {
+                gap: 14px;
+                min-height: 60px;
+            }
+            #cat {
+                width: 110px;
+                height: 110px;
+            }
+            .cat-frame {
+                padding: 4px;
+            }
+            .header-tag {
+                font-size: 10px;
+                padding: 3px 12px;
+            }
+            .question small {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .window {
+                padding: 12px 10px 18px;
+            }
+            .question {
+                font-size: 17px;
+            }
+            .question .hora {
+                font-size: 18px;
+            }
+            .btn {
+                padding: 8px 14px;
+                font-size: 12px;
+                min-width: 55px;
+            }
+            .buttons {
+                gap: 10px;
+                min-height: 50px;
+            }
+            #cat {
+                width: 90px;
+                height: 90px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== FUNDO ESTRELADO ===== -->
+    <div class="fundo-estrelado"></div>
+
+    <!-- ===== JANELA ===== -->
+    <section class="window" id="window">
+        <div class="header-tag">🌟 TERÇA</div>
+
+        <div class="question" id="titulo">
+            Terça a gente <span class="highlight">se vê</span>? 
+            <small>✨ na roda às <span class="hora">19:30</span> ✨</small>
+        </div>
+
+        <!-- Gatinho -->
+        <div class="cat-frame">
+            <canvas id="cat" width="200" height="200"></canvas>
+        </div>
+
+        <!-- Botões -->
+        <div class="buttons" id="buttonsContainer">
+            <button class="btn" id="btnSim">⭐ VOU</button>
+            <button class="btn" id="btnNao">❌ NÃO</button>
+        </div>
+
+        <div style="margin-top: 10px; font-size: 11px; color: #8a7a6a; letter-spacing: 0.5px;">
+            <span class="deco">🌙</span> toque no gatinho <span class="deco">🐱</span>
+        </div>
+    </section>
+
+    <script>
+        // ============================================================
+        //  1.  DESENHO DO GATINHO
+        // ============================================================
+        const canvas = document.getElementById('cat');
+        const ctx = canvas.getContext('2d');
+
+        function drawCat() {
+            ctx.clearRect(0, 0, 200, 200);
+
+            // --- Corpo ---
+            ctx.fillStyle = '#3a2a2a';
+            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.ellipse(100, 130, 50, 40, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // --- Cabeça ---
+            ctx.fillStyle = '#4a3a3a';
+            ctx.shadowColor = 'rgba(0,0,0,0.2)';
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.ellipse(100, 90, 42, 38, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // --- Orelhas ---
+            ctx.fillStyle = '#4a3a3a';
+            ctx.beginPath();
+            ctx.moveTo(68, 62);
+            ctx.lineTo(80, 38);
+            ctx.lineTo(92, 58);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(132, 62);
+            ctx.lineTo(120, 38);
+            ctx.lineTo(108, 58);
+            ctx.fill();
+
+            ctx.fillStyle = '#d97b73';
+            ctx.beginPath();
+            ctx.moveTo(74, 60);
+            ctx.lineTo(82, 44);
+            ctx.lineTo(90, 58);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(126, 60);
+            ctx.lineTo(118, 44);
+            ctx.lineTo(110, 58);
+            ctx.fill();
+
+            // --- Olhos ---
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#f5ede4';
+            ctx.beginPath();
+            ctx.ellipse(82, 86, 14, 16, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(118, 86, 14, 16, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#4a7a3a';
+            ctx.beginPath();
+            ctx.arc(84, 88, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(116, 88, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#1a1a1a';
+            ctx.beginPath();
+            ctx.arc(84, 90, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(116, 90, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(80, 84, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(112, 84, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // --- Nariz ---
+            ctx.fillStyle = '#e87080';
+            ctx.beginPath();
+            ctx.moveTo(100, 98);
+            ctx.lineTo(94, 104);
+            ctx.lineTo(106, 104);
+            ctx.fill();
+
+            // --- Boca ---
+            ctx.strokeStyle = '#3a2a2a';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(94, 110, 8, 0, Math.PI);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(106, 110, 8, 0, Math.PI);
+            ctx.stroke();
+
+            // --- Bigodes ---
+            ctx.strokeStyle = '#5a4a4a';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(72, 96);
+            ctx.lineTo(48, 92);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(72, 100);
+            ctx.lineTo(44, 102);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(72, 104);
+            ctx.lineTo(48, 112);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(128, 96);
+            ctx.lineTo(152, 92);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(128, 100);
+            ctx.lineTo(156, 102);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(128, 104);
+            ctx.lineTo(152, 112);
+            ctx.stroke();
+
+            // --- Patas ---
+            ctx.fillStyle = '#4a3a3a';
+            ctx.shadowBlur = 6;
+            ctx.beginPath();
+            ctx.ellipse(70, 148, 12, 8, -0.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(130, 148, 12, 8, 0.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // --- Rabo ---
+            ctx.strokeStyle = '#4a3a3a';
+            ctx.lineWidth = 7;
+            ctx.beginPath();
+            ctx.moveTo(148, 130);
+            ctx.quadraticCurveTo(180, 120, 170, 90);
+            ctx.stroke();
+        }
+
+        drawCat();
+
+        // ============================================================
+        //  2.  FUNÇÃO RANS() IGUAL AO PRIMEIRO CÓDIGO
+        // ============================================================
+        function rans() {
+            return Math.random() * (window.innerWidth - 100);
+        }
+
+        // ============================================================
+        //  3.  LÓGICA DOS BOTÕES
+        // ============================================================
+        const titulo = document.getElementById('titulo');
+        const btnSim = document.getElementById('btnSim');
+        const btnNao = document.getElementById('btnNao');
+        const windowEl = document.getElementById('window');
+
+        let confirmado = false;
+        let yesScale = 1;
+
+        // --- Função DODGE igual ao primeiro código ---
+        function dodge() {
+            if (confirmado) return;
+
+            btnNao.style.position = 'absolute';
+            btnNao.style.left = rans() + 'px';
+            btnNao.style.top = rans() + 'px';
+            btnNao.style.transform = `scale(${0.85 + Math.random() * 0.3}) rotate(${(Math.random() - 0.5) * 8}deg)`;
+
+            yesScale += 0.07;
+            btnSim.style.transform = `scale(${yesScale})`;
+            btnSim.style.transition = 'transform 0.15s ease';
+
+            btnNao.style.transition = 'left 0.08s ease, top 0.08s ease, transform 0.15s ease';
+        }
+
+        // --- Evento: mouse em cima do NÃO ---
+        btnNao.addEventListener('mouseenter', dodge);
+
+        // --- Evento: toque no NÃO (celular) ---
+        btnNao.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            dodge();
+        }, { passive: false });
+
+        // --- Clique no SIM (VOU) ---
+        btnSim.addEventListener('click', function() {
+            if (confirmado) return;
+            confirmado = true;
+
+            titulo.innerHTML = `
+                🌟 Combinamos então! 
+                <span class="highlight">Terça-feira</span> é dia! 
+                <small>🎉 na roda às <span class="hora">19:30</span> te espero! 💫</small>
+            `;
+
+            btnNao.style.display = 'none';
+
+            btnSim.style.transform = 'scale(1.3)';
+            btnSim.style.background = 'linear-gradient(145deg, #9a7ad6, #5a2a9a)';
+            btnSim.style.boxShadow = '0 0 60px rgba(90, 42, 154, 0.6)';
+            btnSim.textContent = '💫 VOU!';
+
+            chuvaDeEstrelas();
+            confetes();
+        });
+
+        // ============================================================
+        //  4.  CHUVA DE ESTRELAS E EMOJES FELIZES
+        // ============================================================
+        function chuvaDeEstrelas() {
+            const container = document.createElement('div');
+            container.className = 'star-rain';
+            document.body.appendChild(container);
+
+            const emojis = ['⭐', '🌟', '✨', '💫', '😊', '🥰', '😍', '🤩', '🎉', '🎊', '💜', '💛', '🌸', '🌺', '🌈'];
+            const total = 80;
+
+            for (let i = 0; i < total; i++) {
+                const el = document.createElement('div');
+                el.className = 'star';
+                el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.fontSize = (14 + Math.random() * 32) + 'px';
+                el.style.animationDuration = (2.5 + Math.random() * 4) + 's';
+                el.style.animationDelay = (Math.random() * 3) + 's';
+                el.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
+                
+                // Cores diferentes para as estrelas
+                if (el.textContent === '⭐' || el.textContent === '🌟') {
+                    el.style.textShadow = '0 0 30px rgba(255, 215, 0, 0.8)';
+                } else if (el.textContent === '✨' || el.textContent === '💫') {
+                    el.style.textShadow = '0 0 30px rgba(200, 200, 255, 0.8)';
+                } else {
+                    el.style.textShadow = '0 0 30px rgba(255, 100, 200, 0.6)';
+                }
+                
+                container.appendChild(el);
+            }
+
+            setTimeout(() => container.remove(), 7000);
+        }
+
+        // ============================================================
+        //  5.  CONFETES
+        // ============================================================
+        function confetes() {
+            const cores = ['#ffd700', '#c8a0ff', '#ff6bb5', '#6bcb77', '#4d96ff', '#ff6b6b', '#ffd93d', '#a66bff'];
+            const container = document.createElement('div');
+            container.style.position = 'fixed';
+            container.style.top = '0';
+            container.style.left = '0';
+            container.style.width = '100%';
+            container.style.height = '100%';
+            container.style.pointerEvents = 'none';
+            container.style.zIndex = '9998';
+            document.body.appendChild(container);
+
+            for (let i = 0; i < 100; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.top = '-10px';
+                piece.style.background = cores[Math.floor(Math.random() * cores.length)];
+                piece.style.width = (5 + Math.random() * 10) + 'px';
+                piece.style.height = (5 + Math.random() * 10) + 'px';
+                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                piece.style.animationDuration = (2 + Math.random() * 4) + 's';
+                piece.style.animationDelay = (Math.random() * 2) + 's';
+                piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+                container.appendChild(piece);
+            }
+
+            setTimeout(() => container.remove(), 6000);
+        }
+
+        // ============================================================
+        //  6.  EASTER EGG: gatinho pisca
+        // ============================================================
+        canvas.addEventListener('click', function() {
+            const piscar = () => {
+                ctx.clearRect(0, 0, 200, 200);
+                drawCat();
+                ctx.strokeStyle = '#3a2a2a';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(74, 86);
+                ctx.lineTo(90, 86);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(110, 86);
+                ctx.lineTo(126, 86);
+                ctx.stroke();
+            };
+
+            piscar();
+            setTimeout(() => drawCat(), 250);
+        });
+
+        canvas.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            const piscar = () => {
+                ctx.clearRect(0, 0, 200, 200);
+                drawCat();
+                ctx.strokeStyle = '#3a2a2a';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(74, 86);
+                ctx.lineTo(90, 86);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(110, 86);
+                ctx.lineTo(126, 86);
+                ctx.stroke();
+            };
+
+            piscar();
+            setTimeout(() => drawCat(), 250);
+        }, { passive: false });
+
+        // ============================================================
+        //  7.  INICIAL: NÃO fica na posição normal
+        // ============================================================
+        btnNao.style.position = 'relative';
+        btnNao.style.left = 'auto';
+        btnNao.style.top = 'auto';
+
+        console.log('🐱 Terça a gente se vê? 🌟 (celular)');
+    </script>
+
+</body>
+</html>
